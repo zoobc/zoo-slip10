@@ -24,7 +24,7 @@ func TestDeriveForPath(t *testing.T) {
 			name: "wantSuccess",
 			args: args{
 				path: StellarPrimaryAccountPath,
-				seed: NewSeed(mnemonic, defaultPassword),
+				seed: NewSeed(mnemonic, DefaultPassword),
 			},
 			want: &Key{
 				Key: []byte{176, 59, 0 ,195, 59, 16, 248, 192, 96, 249, 116, 127, 137, 93, 227, 187, 175, 197, 112, 240,
@@ -102,7 +102,7 @@ func TestNewMasterKey(t *testing.T) {
 		{
 			name: "wantSuccess",
 			args:args{
-				seed:NewSeed(mnemonic, defaultPassword),
+				seed:NewSeed(mnemonic, DefaultPassword),
 			},
 			want: &Key{
 				Key: []byte{34, 39, 248, 143, 145, 132, 25, 71, 137, 113, 163, 220, 35, 182, 180, 224, 139, 14, 89, 203,
@@ -140,7 +140,7 @@ func TestNewSeed(t *testing.T) {
 			name: "wantSuccess",
 			args: args{
 				mnemonic: mnemonic,
-				password: defaultPassword,
+				password: DefaultPassword,
 			},
 			want: []byte{192,166, 232, 226, 38, 129, 226, 64, 251, 106, 248, 138, 3 ,237, 155, 156, 250, 183, 211, 81, 69,
 				245, 156, 225, 229, 120, 210, 20, 232, 99, 130, 14, 68, 176, 193, 46, 54, 136, 18, 159, 114, 53, 234, 105, 114, 177, 239, 111, 56, 23, 86, 81, 124, 103, 3 ,128, 46, 116, 71, 154, 30, 165, 231, 246},

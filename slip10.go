@@ -25,12 +25,12 @@ const (
 	FirstHardenedIndex = uint32(0x80000000)
 	// As in https://github.com/satoshilabs/slips/blob/master/slip-0010.md
 	seedModifier = "ed25519 seed"
-	defaultPassword = "p4ssphr4se"
+	DefaultPassword = "p4ssphr4se"
 )
 
 var (
-	ErrInvalidPath        = errors.New("Invalid derivation path")
-	ErrNoPublicDerivation = errors.New("No public derivation for ed25519")
+	ErrInvalidPath        = errors.New("invalid derivation path")
+	ErrNoPublicDerivation = errors.New("no public derivation for ed25519")
 
 	pathRegex = regexp.MustCompile(`^m(\/[0-9]+')+$`)
 )
