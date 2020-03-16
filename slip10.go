@@ -1,4 +1,4 @@
-package zooslip10
+package slip10
 
 import (
 	"bytes"
