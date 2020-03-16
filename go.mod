@@ -1,4 +1,4 @@
-module github.com/zoobc/zooslip10
+module github.com/zoobc/zoo-slip10
 
 go 1.14
 
