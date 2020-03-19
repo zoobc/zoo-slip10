@@ -12,6 +12,9 @@ import (
 	"strings"
 
 	"github.com/tyler-smith/go-bip39"
+	"github.com/zoobc/zoobc-core/common/model"
+	"github.com/zoobc/zoobc-core/common/transaction"
+	"github.com/zoobc/zoobc-core/common/util"
 	"golang.org/x/crypto/ed25519"
 )
 
@@ -145,7 +148,6 @@ func (k *Key) Serialize() string {
 	return base64.URLEncoding.EncodeToString(rawAddress)
 }
 
-
 func checkSum(bytes []byte) byte {
 	n := len(bytes)
 	var a byte
@@ -175,4 +177,39 @@ func isValidPath(path string) bool {
 
 func NewSeed(mnemonic, password string) []byte {
 	return bip39.NewSeed(mnemonic, password)
+}
+
+func GenerateSignedTxBytesScheduler(tx *model.Transaction, senderSeed string, PrivateKey []byte, signatureType int32) []byte {
+	var (
+		transactionUtil = &transaction.Util{}
+		txType          transaction.TypeAction
+	)
+	txType, _ = (&transaction.TypeSwitcher{}).GetTransactionType(tx)
+	minimumFee, _ := txType.GetMinimumFee()
+	tx.Fee += minimumFee
+
+	unsignedTxBytes, _ := transactionUtil.GetTransactionBytes(tx, false)
+	if senderSeed == "" {
+		return unsignedTxBytes
+	}
+	tx.Signature, _ = k.Sign(
+		unsignedTxBytes,
+	)
+	signedTxBytes, _ := transactionUtil.GetTransactionBytes(tx, true)
+	return signedTxBytes
+}
+
+func (k *Key) Sign(payload []byte) ([]byte, error) {
+	buffer := bytes.NewBuffer([]byte{})
+	buffer.Write(util.ConvertUint32ToBytes(uint32(signatureType)))
+
+	var (
+		ed25519Signature = NewEd25519Signature()
+	)
+	privateKey := append(privateKey, k.Key...)
+	PublicKey, _ = k.PublicKey()
+	privateKey = append(privateKey, PublicKey...)
+	signature = ed25519Signature.Sign(privateKey, payload)
+	buffer.Write(signature)
+	return buffer.Bytes(), nil
 }
