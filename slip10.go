@@ -12,7 +12,6 @@ import (
 	"strings"
 
 	"github.com/tyler-smith/go-bip39"
-	"github.com/zoobc/zoobc-core/common/util"
 	"golang.org/x/crypto/ed25519"
 )
 
@@ -179,7 +178,7 @@ func NewSeed(mnemonic, password string) []byte {
 
 func (k *Key) Sign(payload []byte) ([]byte, error) {
 	buffer := bytes.NewBuffer([]byte{})
-	buffer.Write(util.ConvertUint32ToBytes(uint32(0)))
+	binary.LittleEndian.PutUint32(buffer, 0)
 
 	privateKey := append(privateKey, k.Key...)
 	PubKey, _ := k.PublicKey()
