@@ -4,13 +4,15 @@ import (
 	"bytes"
 	"crypto/hmac"
 	"crypto/sha512"
+	"encoding/base64"
 	"encoding/binary"
 	"errors"
-	"github.com/tyler-smith/go-bip39"
-	"golang.org/x/crypto/ed25519"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/tyler-smith/go-bip39"
+	"golang.org/x/crypto/ed25519"
 )
 
 const (
@@ -24,7 +26,7 @@ const (
 	// FirstHardenedIndex is the index of the first hardened key.
 	FirstHardenedIndex = uint32(0x80000000)
 	// As in https://github.com/satoshilabs/slips/blob/master/slip-0010.md
-	seedModifier = "ed25519 seed"
+	seedModifier    = "ed25519 seed"
 	DefaultPassword = "p4ssphr4se"
 )
 
@@ -127,6 +129,33 @@ func (k *Key) RawSeed() [32]byte {
 	return rawSeed
 }
 
+func (k *Key) Serialize() string {
+	var (
+		rawAddress  = make([]byte, 33)
+		pubKey, err = k.PublicKey()
+	)
+
+	if err != nil {
+		return ""
+	}
+	copy(rawAddress, pubKey)
+
+	rawAddress[32] = checkSum(pubKey)
+
+	return base64.URLEncoding.EncodeToString(rawAddress)
+}
+
+
+func checkSum(bytes []byte) byte {
+	n := len(bytes)
+	var a byte
+	for i := 0; i < n; i++ {
+		a += bytes[i]
+	}
+	return a
+
+}
+
 func isValidPath(path string) bool {
 	if !pathRegex.MatchString(path) {
 		return false
@@ -144,8 +173,6 @@ func isValidPath(path string) bool {
 	return true
 }
 
-
 func NewSeed(mnemonic, password string) []byte {
 	return bip39.NewSeed(mnemonic, password)
 }
-
