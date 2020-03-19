@@ -179,7 +179,7 @@ func NewSeed(mnemonic, password string) []byte {
 
 func (k *Key) Sign(payload []byte) ([]byte, error) {
 	buffer := bytes.NewBuffer([]byte{})
-	buffer.Write(util.ConvertUint32ToBytes(uint32(signatureType)))
+	buffer.Write(util.ConvertUint32ToBytes(uint32(0)))
 
 	privateKey := append(privateKey, k.Key...)
 	PubKey, _ := k.PublicKey()
