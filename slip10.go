@@ -7,7 +7,6 @@ import (
 	"encoding/base64"
 	"encoding/binary"
 	"errors"
-	"log"
 	"regexp"
 	"strconv"
 	"strings"
@@ -187,7 +186,6 @@ func (k *Key) Sign(payload []byte) []byte {
 	buffer.Write(buf)
 	PrivKey = append(PrivKey, k.Key...)
 	PubKey, _ := k.PublicKey()
-	log.Println("PublicKey = ", PubKey)
 	PrivKey = append(PrivKey, PubKey...)
 	signedPayload := ed25519.Sign(PrivKey, payload)
 	buffer.Write(signedPayload)

@@ -1,8 +1,6 @@
 package slip10
 
 import (
-	"fmt"
-	"log"
 	"reflect"
 	"testing"
 )
@@ -217,8 +215,6 @@ func TestKey_Sign(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			masterKey, _ := DeriveForPath("m/44'/148'/0'", tt.args.Seed)
-			fmt.Println("")
-			log.Println("masterkey derivedPath Result = ", masterKey.Key)
 			k := &Key{
 				Key: masterKey.Key,
 			}
