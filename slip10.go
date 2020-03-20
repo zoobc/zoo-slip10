@@ -145,7 +145,6 @@ func (k *Key) Serialize() string {
 	return base64.URLEncoding.EncodeToString(rawAddress)
 }
 
-
 func checkSum(bytes []byte) byte {
 	n := len(bytes)
 	var a byte
@@ -175,4 +174,20 @@ func isValidPath(path string) bool {
 
 func NewSeed(mnemonic, password string) []byte {
 	return bip39.NewSeed(mnemonic, password)
+}
+
+func (k *Key) Sign(payload []byte) []byte {
+	var (
+		PrivKey []byte
+	)
+	buffer := bytes.NewBuffer([]byte{})
+	buf := make([]byte, 4, 4)
+	binary.LittleEndian.PutUint32(buf, 0)
+	buffer.Write(buf)
+	PrivKey = append(PrivKey, k.Key...)
+	PubKey, _ := k.PublicKey()
+	PrivKey = append(PrivKey, PubKey...)
+	signedPayload := ed25519.Sign(PrivKey, payload)
+	buffer.Write(signedPayload)
+	return buffer.Bytes()
 }

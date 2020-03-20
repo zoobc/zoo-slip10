@@ -190,3 +190,37 @@ func TestKey_Serialize(t *testing.T) {
 		})
 	}
 }
+
+func TestKey_Sign(t *testing.T) {
+	type args struct {
+		Seed    []byte
+		Payload []byte
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    []byte
+		wantErr bool
+	}{
+		{
+			name: "wantSuccess",
+			args: args{
+				Seed:    NewSeed(mnemonic, DefaultPassword),
+				Payload: []byte{1, 1, 1, 1, 1},
+			},
+			want: []byte{0, 0, 0, 0, 110, 66, 70, 93, 92, 101, 4, 194, 85, 144, 52, 236, 241, 61, 16, 8, 182, 241, 85, 95, 155, 148, 34, 146, 109, 71, 83, 8, 218, 224, 74, 163, 171, 97, 1, 114,
+				162, 241, 120, 90, 99, 133, 171, 201, 212, 234, 130, 199, 223, 82, 1, 241, 156, 219, 212, 204, 5, 179, 161, 18, 238, 181, 212, 15},
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			masterKey, _ := DeriveForPath("m/44'/148'/0'", tt.args.Seed)
+			k := &Key{
+				Key: masterKey.Key,
+			}
+			if got := k.Sign(tt.args.Payload); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Sign() = %v, \n want %v", got, tt.want)
+			}
+		})
+	}
+}
