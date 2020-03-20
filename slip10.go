@@ -176,14 +176,18 @@ func NewSeed(mnemonic, password string) []byte {
 	return bip39.NewSeed(mnemonic, password)
 }
 
-func (k *Key) Sign(payload []byte) ([]byte, error) {
+func (k *Key) Sign(payload []byte) []byte {
+	var (
+		PrivKey []byte
+	)
 	buffer := bytes.NewBuffer([]byte{})
-	binary.LittleEndian.PutUint32(buffer, 0)
-
-	privateKey := append(privateKey, k.Key...)
+	buf := make([]byte, 4, 4)
+	binary.LittleEndian.PutUint32(buf, 0)
+	buffer.Write(buf)
+	PrivKey = append(PrivKey, k.Key...)
 	PubKey, _ := k.PublicKey()
-	privateKey = append(privateKey, PubKey...)
-	signature := ed25519.Sign(privateKey, payload)
-	buffer.Write(signature)
-	return buffer.Bytes(), nil
+	PrivKey = append(PrivKey, PubKey...)
+	signedPayload := ed25519.Sign(PrivKey, payload)
+	buffer.Write(signedPayload)
+	return buffer.Bytes()
 }
