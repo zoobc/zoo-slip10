@@ -16,18 +16,18 @@ import (
 )
 
 const (
-	// StellarAccountPrefix is a prefix for Stellar key pairs derivation.
-	StellarAccountPrefix = "m/44'/148'"
-	// StellarPrimaryAccountPath is a derivation path of the primary account.
-	StellarPrimaryAccountPath = "m/44'/148'/0'"
-	// StellarAccountPathFormat is a path format used for Stellar key pair
+	// ZoobcAccountPrefix is a prefix for Zoobc key pairs derivation.
+	ZoobcAccountPrefix = "m/44'/883'"
+	// ZoobcPrimaryAccountPath is a derivation path of the primary account.
+	ZoobcPrimaryAccountPath = "m/44'/883'/0'"
+	// ZoobcAccountPathFormat is a path format used for Zoobc key pair
 	// derivation as described in SEP-00XX. Use with `fmt.Sprintf` and `DeriveForPath`.
-	StellarAccountPathFormat = "m/44'/148'/%d'"
+	ZoobcAccountPathFormat = "m/44'/883'/%d'"
 	// FirstHardenedIndex is the index of the first hardened key.
 	FirstHardenedIndex = uint32(0x80000000)
 	// As in https://github.com/satoshilabs/slips/blob/master/slip-0010.md
 	seedModifier    = "ed25519 seed"
-	DefaultPassword = "p4ssphr4se"
+	DefaultPassword = ""
 )
 
 var (
